@@ -3,7 +3,7 @@ import time
 
 Title = input("Enter the blog title here : ")
 TitleWords = Title.split()
-Title = "_draft_" + "-".join(TitleWords)
+Title = "-".join(TitleWords)
 
 os.mkdir(path="_posts/"+Title)
 date = time.localtime()
