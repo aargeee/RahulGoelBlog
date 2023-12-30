@@ -7,3 +7,4 @@ klise-*.gem
 Gemfile.lock
 _drafts*/
 _posts/_draft*
+.vscode/
