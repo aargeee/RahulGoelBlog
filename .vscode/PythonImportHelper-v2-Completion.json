@@ -1,0 +1,128 @@
+[
+    {
+        "label": "os",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "os",
+        "description": "os",
+        "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "time",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "time",
+        "description": "time",
+        "detail": "time",
+        "documentation": {}
+    },
+    {
+        "label": "Title",
+        "kind": 5,
+        "importPath": "_site.genTemplate",
+        "description": "_site.genTemplate",
+        "peekOfCode": "Title = input(\"Enter the blog title here : \")\nTitleWords = Title.split()\nTitle = \"-\".join(TitleWords)\nos.mkdir(path=\"_posts/\"+Title)\ndate = time.localtime()\nfileName = f\"{date.tm_year}-{date.tm_mon}-{date.tm_mday}-{Title}.md\"\nf = open(f\"_posts/{Title}/{fileName}\", \"w\")\nf.writelines([\n    \"---\\n\",\n    f\"title: {' '.join(TitleWords)}\\n\",",
+        "detail": "_site.genTemplate",
+        "documentation": {}
+    },
+    {
+        "label": "TitleWords",
+        "kind": 5,
+        "importPath": "_site.genTemplate",
+        "description": "_site.genTemplate",
+        "peekOfCode": "TitleWords = Title.split()\nTitle = \"-\".join(TitleWords)\nos.mkdir(path=\"_posts/\"+Title)\ndate = time.localtime()\nfileName = f\"{date.tm_year}-{date.tm_mon}-{date.tm_mday}-{Title}.md\"\nf = open(f\"_posts/{Title}/{fileName}\", \"w\")\nf.writelines([\n    \"---\\n\",\n    f\"title: {' '.join(TitleWords)}\\n\",\n    f\"date: {date.tm_year}-{date.tm_mon}-{date.tm_mday} {date.tm_hour}:{date.tm_min}:{date.tm_sec} {time.timezone}\\n\",",
+        "detail": "_site.genTemplate",
+        "documentation": {}
+    },
+    {
+        "label": "Title",
+        "kind": 5,
+        "importPath": "_site.genTemplate",
+        "description": "_site.genTemplate",
+        "peekOfCode": "Title = \"-\".join(TitleWords)\nos.mkdir(path=\"_posts/\"+Title)\ndate = time.localtime()\nfileName = f\"{date.tm_year}-{date.tm_mon}-{date.tm_mday}-{Title}.md\"\nf = open(f\"_posts/{Title}/{fileName}\", \"w\")\nf.writelines([\n    \"---\\n\",\n    f\"title: {' '.join(TitleWords)}\\n\",\n    f\"date: {date.tm_year}-{date.tm_mon}-{date.tm_mday} {date.tm_hour}:{date.tm_min}:{date.tm_sec} {time.timezone}\\n\",\n    \"tags: []\\n\",",
+        "detail": "_site.genTemplate",
+        "documentation": {}
+    },
+    {
+        "label": "date",
+        "kind": 5,
+        "importPath": "_site.genTemplate",
+        "description": "_site.genTemplate",
+        "peekOfCode": "date = time.localtime()\nfileName = f\"{date.tm_year}-{date.tm_mon}-{date.tm_mday}-{Title}.md\"\nf = open(f\"_posts/{Title}/{fileName}\", \"w\")\nf.writelines([\n    \"---\\n\",\n    f\"title: {' '.join(TitleWords)}\\n\",\n    f\"date: {date.tm_year}-{date.tm_mon}-{date.tm_mday} {date.tm_hour}:{date.tm_min}:{date.tm_sec} {time.timezone}\\n\",\n    \"tags: []\\n\",\n    f\"description: {input('Enter Blog Description : ')}\\n\",\n    \"---\\n\",",
+        "detail": "_site.genTemplate",
+        "documentation": {}
+    },
+    {
+        "label": "fileName",
+        "kind": 5,
+        "importPath": "_site.genTemplate",
+        "description": "_site.genTemplate",
+        "peekOfCode": "fileName = f\"{date.tm_year}-{date.tm_mon}-{date.tm_mday}-{Title}.md\"\nf = open(f\"_posts/{Title}/{fileName}\", \"w\")\nf.writelines([\n    \"---\\n\",\n    f\"title: {' '.join(TitleWords)}\\n\",\n    f\"date: {date.tm_year}-{date.tm_mon}-{date.tm_mday} {date.tm_hour}:{date.tm_min}:{date.tm_sec} {time.timezone}\\n\",\n    \"tags: []\\n\",\n    f\"description: {input('Enter Blog Description : ')}\\n\",\n    \"---\\n\",\n])",
+        "detail": "_site.genTemplate",
+        "documentation": {}
+    },
+    {
+        "label": "f",
+        "kind": 5,
+        "importPath": "_site.genTemplate",
+        "description": "_site.genTemplate",
+        "peekOfCode": "f = open(f\"_posts/{Title}/{fileName}\", \"w\")\nf.writelines([\n    \"---\\n\",\n    f\"title: {' '.join(TitleWords)}\\n\",\n    f\"date: {date.tm_year}-{date.tm_mon}-{date.tm_mday} {date.tm_hour}:{date.tm_min}:{date.tm_sec} {time.timezone}\\n\",\n    \"tags: []\\n\",\n    f\"description: {input('Enter Blog Description : ')}\\n\",\n    \"---\\n\",\n])\nf.close()",
+        "detail": "_site.genTemplate",
+        "documentation": {}
+    },
+    {
+        "label": "Title",
+        "kind": 5,
+        "importPath": "genTemplate",
+        "description": "genTemplate",
+        "peekOfCode": "Title = input(\"Enter the blog title here : \")\nTitleWords = Title.split()\nTitle = \"-\".join(TitleWords)\nos.mkdir(path=\"_posts/\"+Title)\ndate = time.localtime()\nfileName = f\"{date.tm_year}-{date.tm_mon}-{date.tm_mday}-{Title}.md\"\nf = open(f\"_posts/{Title}/{fileName}\", \"w\")\nf.writelines([\n    \"---\\n\",\n    f\"title: {' '.join(TitleWords)}\\n\",",
+        "detail": "genTemplate",
+        "documentation": {}
+    },
+    {
+        "label": "TitleWords",
+        "kind": 5,
+        "importPath": "genTemplate",
+        "description": "genTemplate",
+        "peekOfCode": "TitleWords = Title.split()\nTitle = \"-\".join(TitleWords)\nos.mkdir(path=\"_posts/\"+Title)\ndate = time.localtime()\nfileName = f\"{date.tm_year}-{date.tm_mon}-{date.tm_mday}-{Title}.md\"\nf = open(f\"_posts/{Title}/{fileName}\", \"w\")\nf.writelines([\n    \"---\\n\",\n    f\"title: {' '.join(TitleWords)}\\n\",\n    f\"date: {date.tm_year}-{date.tm_mon}-{date.tm_mday} {date.tm_hour}:{date.tm_min}:{date.tm_sec} {time.timezone}\\n\",",
+        "detail": "genTemplate",
+        "documentation": {}
+    },
+    {
+        "label": "Title",
+        "kind": 5,
+        "importPath": "genTemplate",
+        "description": "genTemplate",
+        "peekOfCode": "Title = \"-\".join(TitleWords)\nos.mkdir(path=\"_posts/\"+Title)\ndate = time.localtime()\nfileName = f\"{date.tm_year}-{date.tm_mon}-{date.tm_mday}-{Title}.md\"\nf = open(f\"_posts/{Title}/{fileName}\", \"w\")\nf.writelines([\n    \"---\\n\",\n    f\"title: {' '.join(TitleWords)}\\n\",\n    f\"date: {date.tm_year}-{date.tm_mon}-{date.tm_mday} {date.tm_hour}:{date.tm_min}:{date.tm_sec} {time.timezone}\\n\",\n    \"tags: []\\n\",",
+        "detail": "genTemplate",
+        "documentation": {}
+    },
+    {
+        "label": "date",
+        "kind": 5,
+        "importPath": "genTemplate",
+        "description": "genTemplate",
+        "peekOfCode": "date = time.localtime()\nfileName = f\"{date.tm_year}-{date.tm_mon}-{date.tm_mday}-{Title}.md\"\nf = open(f\"_posts/{Title}/{fileName}\", \"w\")\nf.writelines([\n    \"---\\n\",\n    f\"title: {' '.join(TitleWords)}\\n\",\n    f\"date: {date.tm_year}-{date.tm_mon}-{date.tm_mday} {date.tm_hour}:{date.tm_min}:{date.tm_sec} {time.timezone}\\n\",\n    \"tags: []\\n\",\n    f\"description: {input('Enter Blog Description : ')}\\n\",\n    \"---\\n\",",
+        "detail": "genTemplate",
+        "documentation": {}
+    },
+    {
+        "label": "fileName",
+        "kind": 5,
+        "importPath": "genTemplate",
+        "description": "genTemplate",
+        "peekOfCode": "fileName = f\"{date.tm_year}-{date.tm_mon}-{date.tm_mday}-{Title}.md\"\nf = open(f\"_posts/{Title}/{fileName}\", \"w\")\nf.writelines([\n    \"---\\n\",\n    f\"title: {' '.join(TitleWords)}\\n\",\n    f\"date: {date.tm_year}-{date.tm_mon}-{date.tm_mday} {date.tm_hour}:{date.tm_min}:{date.tm_sec} {time.timezone}\\n\",\n    \"tags: []\\n\",\n    f\"description: {input('Enter Blog Description : ')}\\n\",\n    \"---\\n\",\n])",
+        "detail": "genTemplate",
+        "documentation": {}
+    },
+    {
+        "label": "f",
+        "kind": 5,
+        "importPath": "genTemplate",
+        "description": "genTemplate",
+        "peekOfCode": "f = open(f\"_posts/{Title}/{fileName}\", \"w\")\nf.writelines([\n    \"---\\n\",\n    f\"title: {' '.join(TitleWords)}\\n\",\n    f\"date: {date.tm_year}-{date.tm_mon}-{date.tm_mday} {date.tm_hour}:{date.tm_min}:{date.tm_sec} {time.timezone}\\n\",\n    \"tags: []\\n\",\n    f\"description: {input('Enter Blog Description : ')}\\n\",\n    \"---\\n\",\n])\nf.close()",
+        "detail": "genTemplate",
+        "documentation": {}
+    }
+]
