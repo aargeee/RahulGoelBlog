@@ -10,50 +10,7 @@ description: because satisfaction of completion
 I stumbled upon this book and thought to myself, let's make a deal I am going to finish this book no matter what and I am going to finish it all the way through. And I had a deadline. 2023. I had a little more than 2 months to finish the book which should be more than enough theoritically. But I just had to make sure I don't give up midway. 
 This will be a compilation of all the things I learnt and all the things I'm going to likely forget. So instead of working my way to the actual book, I want to get to the crux fast.
 
-Table of Contents:
-### Go Fundamentals
-* [Hello World](#hello-world), because new language.
-* [Integers](https://github.com/Rahul-NITD/Go-Say-Hello/tree/main/02_Integers), because essential.
-* [Iteration](https://github.com/Rahul-NITD/Go-Say-Hello/tree/main/03_Iteration), because arthritis.
-* [Arrays and Slices](https://github.com/Rahul-NITD/Go-Say-Hello/tree/main/04_Arrays_and_Slices), because confusion.
-* [Structs, methods & interfaces](https://github.com/Rahul-NITD/Go-Say-Hello/tree/main/05_Structs), because OOP.
-* [Pointers & errors](https://github.com/Rahul-NITD/Go-Say-Hello/tree/main/06_Pointers), because Memory.<!-- TODO -->
-* [Maps](https://github.com/Rahul-NITD/Go-Say-Hello/tree/main/07_Maps), because efficient.
-* [Dependency Injection](https://github.com/Rahul-NITD/Go-Say-Hello/tree/main/08_Dependency%20Injection), because decoupling.
-* [Mocking](https://github.com/Rahul-NITD/Go-Say-Hello/tree/main/09_Mocking), because fast.
-* [Concurrency](https://github.com/Rahul-NITD/Go-Say-Hello/tree/main/10_Concurrency), because multithreading.
-* [Select](https://github.com/Rahul-NITD/Go-Say-Hello/tree/main/11_Select), because racing. <!-- TODO -->
-* [Reflection](https://github.com/Rahul-NITD/Go-Say-Hello/tree/main/12_Reflection), because necessary evil. <!-- TODO -->
-* [Sync](https://github.com/Rahul-NITD/Go-Say-Hello/tree/main/13_Sync), because resource locks.
-* [Context](https://github.com/Rahul-NITD/Go-Say-Hello/tree/main/14_Context), because cancellation.
-* [Intro to property based tests](https://github.com/Rahul-NITD/Go-Say-Hello/tree/main/15_Property_Based_Testing), because domain.
-* [Maths](https://github.com/Rahul-NITD/Go-Say-Hello/tree/main/16_Maths), because reality. <!-- TODO -->
-* [Reading files](https://github.com/Rahul-NITD/Go-Say-Hello/tree/main/17_18_Reading_Files_Templating), because IO.
-* [Templating](https://github.com/Rahul-NITD/Go-Say-Hello/tree/main/17_18_Reading_Files_Templating), because HTML.
-* [Generics](https://github.com/Rahul-NITD/Go-Say-Hello/tree/main/19_20_Generics_HOF), because DRY.
-* [Revisiting arrays and slices with generics](https://github.com/Rahul-NITD/Go-Say-Hello/tree/main/19_20_Generics_HOF), because HOF.
-
-### Testing Fundamentals
-* [Introduction to acceptance tests](https://github.com/Rahul-NITD/Go-Say-Hello/tree/main/21_AcceptanceTests), because black box testing. <!-- TODO -->
-* [Scaling acceptance tests](https://github.com/Rahul-NITD/Go-Say-Hello/tree/main/22_Scaling_Acceptance_Tests), because Dockerize.
-* [Working without mocks](), because Fakes.
-* [Refactoring Checklist](), because Better Design.
-
-### Build An Application
-* [Build An Application](24_Poker_Go), because cool. <!-- TODO -->
-
-### Quicklinks
-* [TDD](#hello-world)
-* [Godoc](#integers)
-* [Benchmarking](#iteration)
-* [Coverage](#arrays-and-slices)
-* [Variadic Functions](#arrays-and-slices)
-* [Stringer](#pointers--errors)
-* [Unchecked errors](#pointers--errors)
-* [Race detector](#concurrency)
-* [Mutex](#sync)
-* [Acceptance Test](#maths)
-* [Parsing XML](#maths)
+{% include_relative contents.md %}
 
 ## [Hello World](https://quii.gitbook.io/learn-go-with-tests/go-fundamentals/hello-world)
 
@@ -596,3 +553,309 @@ Property based tests help you do this by throwing random data at your code and v
     }
     ```
 
+## [Reading files](https://quii.gitbook.io/learn-go-with-tests/go-fundamentals/reading-files)
+
+* For testing file systems use fstest.MapFS
+    ```Go
+    fs := fstest.MapFS{
+		"hello world.md":  {Data: []byte("hi")},
+		"hello-world2.md": {Data: []byte("hola")},
+	}
+    ```
+    for multiple directories, 
+    ```Go
+    fs := fstest.MapFS{
+		"a/hello world.md":  {Data: []byte("hi")},
+		"a/b/hello-world2.md": {Data: []byte("hola")},
+	}
+    ```
+    `a` and `b` will be treated as directories.
+
+* `fs.ReadDir` reads a directory inside a given fs.FS returning `[]DirEntry`.
+
+## [Templating](https://quii.gitbook.io/learn-go-with-tests/go-fundamentals/html-templates)
+
+* Go has two templating packages `text/template` and `html/template` and they share the same interface. What they both do is allow you to combine a template and some data to produce a string.
+    > Package template (html/template) implements data-driven templates for generating HTML output safe against code injection. It provides the same interface as package text/template and should be used instead of text/template whenever the output is HTML.
+    
+    ```Go
+    package blogrenderer
+
+    import (
+        "embed"
+        "html/template"
+        "io"
+    )
+
+    var (
+        //go:embed "templates/*"
+        postTemplates embed.FS
+    )
+
+    func Render(w io.Writer, p Post) error {
+        templ, err := template.ParseFS(postTemplates, "templates/*.gohtml")
+        if err != nil {
+            return err
+        }
+        if err := templ.Execute(w, p); err != nil {
+            return err
+        }
+        return nil
+    }
+    ```
+
+* ### Approval Tests
+    > ApprovalTests allows for easy testing of larger objects, strings and anything else that can be saved to a file (images, sounds, CSV, etc...)
+
+    * `github.com/approvals/go-approval-tests`
+
+    ```Go
+    func TestRender(t *testing.T) {
+        var (
+            aPost = blogrenderer.Post{
+                Title:       "hello world",
+                Body:        "This is a post",
+                Description: "This is a description",
+                Tags:        []string{"go", "tdd"},
+            }
+        )
+
+        t.Run("it converts a single post into HTML", func(t *testing.T) {
+            buf := bytes.Buffer{}
+
+            if err := blogrenderer.Render(&buf, aPost); err != nil {
+                t.Fatal(err)
+            }
+
+            approvals.VerifyString(t, buf.String())
+        })
+    }
+    ```
+
+    It will generate 2 files `*.received.txt` and `*.approved.txt`. By copying the received version into the approved version, you are approving the changes.
+
+* ### gohtml
+    we can create .gohtml files for templating our stuff
+    ```html
+    {% raw %}
+    <h1>{{.Title}}</h1>
+
+    <p>{{.Description}}</p>
+
+    Tags: <ul>{{range .Tags}}<li>{{.}}</li>{{end}}</ul>
+    {% endraw %}
+    ```
+
+* converting .md to .html, use `https://github.com/gomarkdown/markdown`
+
+## [Generics](https://quii.gitbook.io/learn-go-with-tests/go-fundamentals/generics)
+
+* **The problem with `interface{}`**
+    > By using `interface{}` the compiler can't help us when writing our code, because we're not telling it anything useful about the types of things passed to the function. \
+    Writing functions that take interface{} can be extremely challenging and bug-prone because we've lost our constraints, and we have no information at compile time as to what kinds of data we're dealing with. \
+    This means the compiler can't help us and we're instead more likely to have runtime errors which could affect our users, cause outages, or worse.
+
+    Generics offer us a way to make abstractions (like interfaces) by letting us describe our constraints. They allow us to write functions that have a similar level of flexibility that interface{} offers but retain type-safety and provide a better developer experience for callers.
+
+    ```Go
+    func AssertEqual[T comparable](t *testing.T, got, want T) {
+        t.Helper()
+        if got != want {
+            t.Errorf("got %v, want %v", got, want)
+        }
+    }
+    ```
+    In our case the type of our type parameter is `comparable` and we've given it the label of `T`. This label then lets us describe the types for the arguments to our function (got, want T). \
+    We're using `comparable` because we want to describe to the compiler that we wish to use the `==` and `!=` operators on things of type `T` in our function, we want to compare! 
+
+* **Difference between `[T any]` and `interface{}`**
+
+    * Valid:
+        * `GenericFoo(apple1, apple2)`
+        * `GenericFoo(orange1, orange2)`
+        * `GenericFoo(1, 2)`
+        * `GenericFoo("one", "two")`
+    * Not valid (fails compilation):
+        * `GenericFoo(apple1, orange1)`
+        * `GenericFoo("1", 1)`
+    
+* **Example of stack data structure using generics**
+    ```Go
+    type Stack[T any] struct {
+        values []T
+    }
+
+    func (s *Stack[T]) Push(value T) {
+        s.values = append(s.values, value)
+    }
+
+    func (s *Stack[T]) IsEmpty() bool {
+        return len(s.values) == 0
+    }
+
+    func (s *Stack[T]) Pop() (T, bool) {
+        if s.IsEmpty() {
+            var zero T
+            return zero, false
+        }
+
+        index := len(s.values) - 1
+        el := s.values[index]
+        s.values = s.values[:index]
+        return el, true
+    }
+    ```
+
+## [Revisiting arrays and slices with generics](https://quii.gitbook.io/learn-go-with-tests/go-fundamentals/revisiting-arrays-and-slices-with-generics)
+
+* **Higher Order Functions - Reduce**
+    > In functional programming, fold (also termed reduce, accumulate, aggregate, compress, or inject) refers to a family of higher-order functions that analyze a recursive data structure and through use of a given combining operation, recombine the results of recursively processing its constituent parts, building up a return value. Typically, a fold is presented with a combining function, a top node of a data structure, and possibly some default values to be used under certain conditions. The fold then proceeds to combine elements of the data structure's hierarchy, using the function in a systematic way.
+
+    The reduce function
+    ```Go
+    func Reduce[A any](collection []A, accumulator func(A, A) A, initialValue A) A {
+        var result = initialValue
+        for _, x := range collection {
+            result = accumulator(result, x)
+        }
+        return result
+    }
+    ```
+
+    Usage
+    ```Go
+    // Sum calculates the total from a slice of numbers.
+    func Sum(numbers []int) int {
+        add := func(acc, x int) int { return acc + x }
+        return Reduce(numbers, add, 0)
+    }
+    ```
+
+* **Reduce into a different type**
+    ```Go
+    func Reduce[A, B any](collection []A, accumulator func(B, A) B, initialValue B) B {
+        var result = initialValue
+        for _, x := range collection {
+            result = accumulator(result, x)
+        }
+        return result
+    }
+    ```
+    This allows people to Reduce from a collection of `A` into a `B`.
+
+* **Higher Order Functions - Find**
+    ```Go
+    func Find[A any](items []A, predicate func(A) bool) (value A, found bool) {
+        for _, v := range items {
+            if predicate(v) {
+                return v, true
+            }
+        }
+        return
+    }
+    ```
+    Usage
+    ```Go
+    people := []Person{
+		Person{Name: "Kent Beck"},
+		Person{Name: "Martin Fowler"},
+		Person{Name: "Chris James"},
+	}
+
+	king, found := Find(people, func(p Person) bool {
+		return strings.Contains(p.Name, "Chris")
+	})
+    ```
+
+## [Introduction to acceptance tests](https://quii.gitbook.io/learn-go-with-tests/testing-fundamentals/intro-to-acceptance-tests)
+
+* `SIGTERM` 
+    > You need to shut yourself down, finish whatever work you're doing because after a certain "grace period", I will send SIGKILL, and it's lights out for you.
+
+    > The engineer in you should be feeling uncomfortable with manual testing. It's boring, it doesn't scale, it's inaccurate, and it's wasteful.
+
+    > Usually, unit tests alone are not enough for an effective testing strategy. Remember, we want our systems to always be shippable. We can't rely on manual testing, so we need another kind of testing: acceptance tests.
+
+    > Acceptance tests are a kind of "black-box test". They are sometimes referred to as "functional tests". They should exercise the system as a user of the system would. \
+    The term "black-box" refers to the idea that the test code has no access to the internals of the system, it can only use its public interface and make assertions on the behaviours it observes. This means they can only test the system as a whole.
+
+    [![https://martinfowler.com/articles/practical-test-pyramid.html](image-2.png)](https://martinfowler.com/articles/practical-test-pyramid.html)
+
+    > the unit tests weren't quite giving us the confidence we needed. We want to be really sure the package works when integrated with a real, running program. We should be able to automate the manual checks we were making.
+
+    > The nature of how to write acceptance tests depends on the system you're building, but the principles stay the same. Treat your system like a "black box". If you're making a website, your tests should act like a user, so you'll want to use a headless web browser like Selenium, to click on links, fill in forms, etc. For a RESTful API, you'll send HTTP requests using a client.
+
+## [Scaling acceptance tests](https://quii.gitbook.io/learn-go-with-tests/testing-fundamentals/scaling-acceptance-tests)
+
+> Acceptance tests are essential, and they directly impact your ability to confidently evolve your system over time, with a reasonable cost of change. \
+They're also a fantastic tool to help you work with legacy code. When faced with a poor codebase without any tests, please resist the temptation to start refactoring. Instead, write some acceptance tests to give you a safety net to freely change the system's internals without affecting its functional external behaviour. ATs need not be concerned with internal quality, so they're a great fit in these situations.
+
+> TDD is focused on letting you design for the behaviour you precisely need, iteratively. When starting a new area, you must identify a key, necessary behaviour and aggressively cut scope. \
+Follow a "top-down" approach, starting with an acceptance test (AT) that exercises the behaviour from the outside. This will act as a north-star for your efforts. All you should be focused on is making that test pass. This test will likely be failing for a while whilst you develop enough code to make it pass.
+
+* In the book, we were to test a simple HTTP service that greets the users. We will follow Farley's acceptance test design:
+    * Specification
+    * DSL 
+    * Driver
+    * System
+
+* We start writing the specification first,
+    ```Go
+    import (
+        go_specs_greet "github.com/quii/go-specs-greet"
+    )
+
+    func TestGreeterServer(t *testing.T) {
+        driver := go_specs_greet.Driver{BaseURL: "http://localhost:8080"}
+        specifications.GreetSpecification(t, driver)
+    }
+    ```
+
+* Now we have to code the driver for this, 
+    ```Go
+    import (
+        "io"
+        "net/http"
+    )
+
+    type Driver struct {
+        BaseURL string
+    }
+
+    func (d Driver) Greet() (string, error) {
+        res, err := http.Get(d.BaseURL + "/greet")
+        if err != nil {
+            return "", err
+        }
+        defer res.Body.Close()
+        greeting, err := io.ReadAll(res.Body)
+        if err != nil {
+            return "", err
+        }
+        return string(greeting), nil
+    }
+    ```
+
+* Finally, we set up the system. We use Testcontainers to give us a programmatic way to build Docker images and manage container life-cycles. We will build the system inside a docker container and test against that.
+
+    For code : [Click Here](https://quii.gitbook.io/learn-go-with-tests/testing-fundamentals/scaling-acceptance-tests#running-our-application)
+
+* We create a `Dockerfile`
+
+```Docker
+FROM golang:1.18-alpine
+
+WORKDIR /app
+
+COPY go.mod ./
+
+RUN go mod download
+
+COPY . .
+
+RUN go build -o svr cmd/httpserver/*.go
+
+EXPOSE 8080
+CMD [ "./svr" ]
+```
+* we write a main.go file that starts up a server. This will be running inside a docker container and we will start the docker containers programmatically using Testcontainers each time we test. After testing we shut down our containers. 
