@@ -15,6 +15,8 @@ Rather than getting bogged down in transient details, Event Modeling focuses on 
 
 Notably, Event Modeling draws inspiration from the work of industry experts such as Eric Evans (Domain-Driven Design), Martin Fowler (Event Sourcing), Greg Young (Command Query Responsibility Segregation), and Alberto Brandolini (Event Storming).
 
+To familiarize with this process, we can build the Event modelling diagram of a real world system. Let's build one for EmoJive. A real time chat application but only using emojis. 
+
 ## 7 Steps to Perform Event Modeling
 
 #### 1. Brainstorming
@@ -22,12 +24,25 @@ Notably, Event Modeling draws inspiration from the work of industry experts such
 We begin by discussing the **business goals** of the system. We want to understand the system's intent and how it should behave. We can capture all possible events in the system's timeline. We must also ensure that only **state-changing events** are be specified. These events capture significant transitions in the system.
 Explore all possible events that could occur during the execution of an existing business process. Note these events on orange sticky-notes. These state-changing events can be addressed later by iteratively working on the design. We want to add, modify and remove the events as new insights emerge. Remember that an event represents a **fact** occuring in the domain. Events are the source of truth, and we can derive the system's current state from them. They are **immutable** and represent essential business facts.
 
+To build EmoJive, we can think of some events that might occur in our application. Note that in this step we must focus on writing down as many events as possible and keep them business oriented. We write down these events on a orange sticky note. 
+
+![brainstorming on orange sticky notes](brainstorming.png)
+
 #### 2. **The Plot / Timeline**
 
 The next step is to form a story from these events by arranging them in cronological order, creating a sequence of events that describes our system. During this step, we gain further insights for missing events and removing non state-changing events become evident. Run through the story from both sides to make sure the events make sense.
 
+We can start by removing non-business events from our pile. Events such as `website opened` and `alerted new user joined` do not carry much business value. Here is the sequence of events in the following manner: a user connects to our system, and a WebSocket connection is established. The user can provide us with a username in the `User registered` event. Next, the user creates a chat space and joins it. They send a message in the chat space, which is received by our server and stored in a database. This message is broadcast to all the members in the chat space. After an engaging emoji battle, the user disconnects.
+
+![orange notes organised in a timeline](timeline.png)
+
 #### 3. **The Storyboard**
 We add the UI/UX elemtents in this step. We must remember that good user experience is necessary for good business. We can incorporate good user experience by incorporating it during the planning phase itself. In this phase, we create mockups, wireframes or entire UI designs(if time permits). For systems involving multiple users, we delineate their roles by separating the UI/UX of each user into different swimlanes.
+
+I have designed some mockups. The first represents the user registration page. Here, the user will enter a sequence of emojis representing you. The second represents the UI for creating a new space. The third mockup represents the UI of a space without any messages. The fourth represents a space after a few chats.
+
+![Mockups in high resolution](<Mockups.jpeg>)
+![added UI elemets to our timeline](UI.png)
 
 #### 4. **Identify Inputs**
 In this step, we enable users to change the system's state. We use blue sticky notes to represent a user's action. We include input forms and buttons in the mockups and identify the commands sent to the system for processing. Thus, we are linking an event to the UI through a command. These commands act as bridges between user interactions and the underlying system.
