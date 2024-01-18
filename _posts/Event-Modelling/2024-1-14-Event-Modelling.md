@@ -17,6 +17,8 @@ Notably, Event Modeling draws inspiration from the work of industry experts such
 
 To familiarize with this process, we are going to build the Event modelling diagram of a real world system. Let's build one for EmoJive. A real time chat application but only using emojis. 
 
+You can view the finished Event Modelling diagram for EmoJive [here](https://miro.com/app/board/uXjVN48oIbY=/?share_link_id=237340155809).
+
 ## 7 Steps to Perform Event Modeling
 
 #### 1. Brainstorming
