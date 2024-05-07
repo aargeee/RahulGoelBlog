@@ -263,7 +263,12 @@ Seafood
 Details: In addition, get all the characters preceding the (first) hyphen. Return ship names alphabetically.
 
 Let's see how many tuples do we have that have ShipNames containing hyphen
-`SELECT COUNT(*) FROM 'Order' WHERE ShipName LIKE '%-%'` Running this gave me 1731. I'm sure there are duplicated. Let's remove the duplicates and count the number of distinct ShipNames having hyphen in their name. Okay cool, we are down to only 9 ShipNames.
+
+```SQL
+SELECT COUNT(*) FROM 'Order' WHERE ShipName LIKE '%-%'
+```
+
+Running this gave me 1731. I'm sure there are duplicated. Let's remove the duplicates and count the number of distinct ShipNames having hyphen in their name. Okay cool, we are down to only 9 ShipNames.
 
 After digging around, I found `instr()` and `substr()` functions. Now the question is fairly easy.
 
@@ -293,8 +298,17 @@ The result checks out with the hint given in the question.
 Details: You should print the Order Id, ShipCountry, and another column that is either 'NorthAmerica' or 'OtherPlace' depending on the Ship Country.
 Order by the primary key (Id) ascending and return 20 rows starting from Order Id 15445
 
-Select out 20 rows ordered by primary key starting from id 15445. To do this, first I selected out 20 rows ordered by id. `SELECT * from 'Order' ORDER BY Id LIMIT 20;`. Now, we have to offset our results such that it starts from id 15445. Let's find the row value of tuple with id 15445 and offset our query by the row number. I used nesting queries to count the number of tuples that are less than id 15445. Then the result is used to offset my range so now We can see the first 20 queries ordered by id starting from id 15445.
-`SELECT * from 'Order' ORDER BY Id LIMIT 20 OFFSET (SELECT COUNT(Id) FROM 'Order' WHERE Id < 15445);`
+Select out 20 rows ordered by primary key starting from id 15445. To do this, first I selected out 20 rows ordered by id.
+
+```SQL
+SELECT * from 'Order' ORDER BY Id LIMIT 20;
+```
+
+Now, we have to offset our results such that it starts from id 15445. Let's find the row value of tuple with id 15445 and offset our query by the row number. I used nesting queries to count the number of tuples that are less than id 15445. Then the result is used to offset my range so now We can see the first 20 queries ordered by id starting from id 15445.
+
+```SQL
+SELECT * from 'Order' ORDER BY Id LIMIT 20 OFFSET (SELECT COUNT(Id) FROM 'Order' WHERE Id < 15445);
+```
 
 Now, We have to extract only the required data. For conditional output, I used CASES and here's the solution for the question.
 
@@ -406,7 +420,7 @@ This will do the job. Now I have to give the file names to it one by one. I woul
 > Q4. All Good [10]
 > Q5. All Good [10]
 
-Cool, we are on the right track and my tally is correct, I'm standing at 30 points. Which, honestly, is slightly discouraging to me.😅
+Cool, we are on the right track and if my tally is correct, I'm standing at 30 points. Which, honestly, is slightly discouraging to me.😅
 
 Anyways, Let's continue answering.
 
@@ -415,9 +429,32 @@ Anyways, Let's continue answering.
 Details: Print the following format, order by ProductName alphabetically.
 
 I tried a few options but I couldn't get the hang of it for a few minutes. I'm going to try a little bit more. Let's break it down, Can I count the number of orders for each discontinued Product?
-`select count(*) from OrderDetail as OD inner join Product as P on P.Id = OD.ProductId where P.Discontinued = 1;` This gave me a nice small number of 64598. Let's find the number of orders for each product. `select P.Id, P.ProductName, count(*) from OrderDetail as OD inner join Product as P on P.Id = OD.ProductId where P.Discontinued = 1 group by P.Id;`. Seems to be the right direction tbh. I also thought of another way to do the above query and I feel better about this. `select DP.Id, DP.ProductName, count(1) from OrderDetail as OD join (select Id, ProductName from Product where Discontinued = 1) as DP on OD.ProductId = DP.Id group by DP.Id;` basically, I nested a query to create a temp table and join that into the first table. I think with one more level of inception, we can achieve our answer.
 
-After some painstaking 20 minutes, I have come up with this, `Select O.Id as DiscOrderId from 'Order' as O join (Select MIN(O.OrderDate) as OrderDate from 'Order' as O join (select OrderId, ProductId from OrderDetail join Product on Product.Id = OrderDetail.ProductId where Product.Discontinued = 1) as DP on O.Id = DP.OrderId  group by DP.ProductId) as ODates on O.OrderDate = ODates.OrderDate;`. It returns all the OrderIds where the Discontinued products were ordered for the first time. Now I just have to join this table to the Customer table to fetch the required answer. But first let me modify a little bit more so I am displaying the ProductName as well.
+```SQL
+select count(*) from OrderDetail as OD inner join Product as P on P.Id = OD.ProductId where P.Discontinued = 1;
+```
+
+This gave me a nice small number of 64598. Let's find the number of orders for each product. 
+
+```SQL
+select P.Id, P.ProductName, count(*) from OrderDetail as OD inner join Product as P on P.Id = OD.ProductId where P.Discontinued = 1 group by P.Id;
+```
+
+Seems to be the right direction tbh. I also thought of another way to do the above query and I feel better about this. 
+
+```SQL
+select DP.Id, DP.ProductName, count(1) from OrderDetail as OD join (select Id, ProductName from Product where Discontinued = 1) as DP on OD.ProductId = DP.Id group by DP.Id;
+```
+
+Basically, I nested a query to create a temp table and join that into the first table. I think with one more level of inception, we can achieve our answer.
+
+After some painstaking 20 minutes, I have come up with this, 
+
+```SQL
+Select O.Id as DiscOrderId from 'Order' as O join (Select MIN(O.OrderDate) as OrderDate from 'Order' as O join (select OrderId, ProductId from OrderDetail join Product on Product.Id = OrderDetail.ProductId where Product.Discontinued = 1) as DP on O.Id = DP.OrderId  group by DP.ProductId) as ODates on O.OrderDate = ODates.OrderDate;
+```
+
+It returns all the OrderIds where the Discontinued products were ordered for the first time. Now I just have to join this table to the Customer table to fetch the required answer. But first let me modify a little bit more so I am displaying the ProductName as well.
 Done. Here's the code,
 
 ```SQL
